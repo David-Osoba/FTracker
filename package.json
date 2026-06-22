@@ -1,0 +1,9 @@
+{
+  "name": "budget-tracker-root",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "npx concurrently \"npm run dev --prefix web\" \".\\venv\\Scripts\\uvicorn api.index:app --reload --port 8000\"",
+    "build": "npm run build --prefix web"
+  }
+}

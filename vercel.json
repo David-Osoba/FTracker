@@ -1,0 +1,24 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "api/index.py",
+      "use": "@vercel/python"
+    },
+    {
+      "src": "web/package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "dist"
+      }
+    }
+  ],
+  "routes": [
+    { "src": "/api/(.*)", "dest": "api/index.py" },
+    { "src": "/sw.js", "dest": "/sw.js" },
+    { "src": "/workbox-(.*)", "dest": "/workbox-$1" },
+    { "src": "/manifest.json", "dest": "/manifest.json" },
+    { "src": "/icon-(.*)", "dest": "/icon-$1" },
+    { "src": "/(.*)", "dest": "/$1" }
+  ]
+}
