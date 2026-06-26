@@ -30,7 +30,7 @@ export default function Goals({ currency }) {
   const { data: goals, isLoading } = useQuery({
     queryKey: ['goals'],
     queryFn: async () => {
-      const res = await fetch('/api/goals')
+      const res = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/goals`)
       if (!res.ok) throw new Error('Failed to fetch goals')
       return res.json()
     }
@@ -39,7 +39,7 @@ export default function Goals({ currency }) {
   // Add Goal Mutation
   const addGoalMutation = useMutation({
     mutationFn: async (newGoal) => {
-      const res = await fetch('/api/goals', {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/goals`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(newGoal)
@@ -60,7 +60,7 @@ export default function Goals({ currency }) {
   // Update Goal Mutation
   const updateGoalMutation = useMutation({
     mutationFn: async ({ id, ...updatedData }) => {
-      const res = await fetch(`/api/goals/${id}`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/goals/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(updatedData)
@@ -76,7 +76,7 @@ export default function Goals({ currency }) {
   // Delete Goal Mutation
   const deleteGoalMutation = useMutation({
     mutationFn: async (id) => {
-      const res = await fetch(`/api/goals/${id}`, { method: 'DELETE' })
+      const res = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/goals/${id}`, { method: 'DELETE' })
       if (!res.ok) throw new Error('Failed to delete goal')
       return res.json()
     },

@@ -19,7 +19,7 @@ export default function Settings({
   const { data: allTransactions } = useQuery({
     queryKey: ['all-transactions-for-settings'],
     queryFn: async () => {
-      const res = await fetch('/api/transactions')
+      const res = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/transactions`)
       return res.json()
     }
   })
@@ -27,7 +27,7 @@ export default function Settings({
   const { data: allGoals } = useQuery({
     queryKey: ['all-goals-for-settings'],
     queryFn: async () => {
-      const res = await fetch('/api/goals')
+      const res = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/goals`)
       return res.json()
     }
   })
@@ -46,12 +46,12 @@ export default function Settings({
     try {
       if (Array.isArray(allTransactions)) {
         await Promise.all(
-          allTransactions.map(tx => fetch(`/api/transactions/${tx.id}`, { method: 'DELETE' }))
+          allTransactions.map(tx => fetch(`${import.meta.env.VITE_API_URL || ''}/api/transactions/${tx.id}`, { method: 'DELETE' }))
         )
       }
       if (Array.isArray(allGoals)) {
         await Promise.all(
-          allGoals.map(g => fetch(`/api/goals/${g.id}`, { method: 'DELETE' }))
+          allGoals.map(g => fetch(`${import.meta.env.VITE_API_URL || ''}/api/goals/${g.id}`, { method: 'DELETE' }))
         )
       }
       setStartingBalance(0)
@@ -70,7 +70,7 @@ export default function Settings({
 
   const handleExportCSV = async () => {
     try {
-      const res = await fetch('/api/transactions')
+      const res = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/transactions`)
       if (!res.ok) return
       const data = await res.json()
       

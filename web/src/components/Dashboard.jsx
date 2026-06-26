@@ -135,7 +135,7 @@ export default function Dashboard({ currency, startingBalance }) {
   const { data: summary, isLoading: isSummaryLoading } = useQuery({
     queryKey: ['summary', selectedYear, selectedMonth],
     queryFn: async () => {
-      const res = await fetch(`/api/summary?year=${selectedYear}&month=${selectedMonth}`)
+      const res = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/summary?year=${selectedYear}&month=${selectedMonth}`)
       if (!res.ok) throw new Error('Network error')
       return res.json()
     }
@@ -145,7 +145,7 @@ export default function Dashboard({ currency, startingBalance }) {
   const { data: transactions, isLoading: isTransactionsLoading } = useQuery({
     queryKey: ['transactions', selectedYear, selectedMonth],
     queryFn: async () => {
-      const res = await fetch(`/api/transactions?year=${selectedYear}&month=${selectedMonth}`)
+      const res = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/transactions?year=${selectedYear}&month=${selectedMonth}`)
       if (!res.ok) throw new Error('Network error')
       return res.json()
     }
@@ -154,7 +154,7 @@ export default function Dashboard({ currency, startingBalance }) {
   // Add Mutation
   const addMutation = useMutation({
     mutationFn: async (newTx) => {
-      const res = await fetch('/api/transactions', {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/transactions`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(newTx)
@@ -234,7 +234,7 @@ export default function Dashboard({ currency, startingBalance }) {
   // Edit Mutation
   const editMutation = useMutation({
     mutationFn: async (updatedTx) => {
-      const res = await fetch(`/api/transactions/${updatedTx.id}`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/transactions/${updatedTx.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(updatedTx)
@@ -313,7 +313,7 @@ export default function Dashboard({ currency, startingBalance }) {
   // Delete Mutation
   const deleteMutation = useMutation({
     mutationFn: async (id) => {
-      const res = await fetch(`/api/transactions/${id}`, { method: 'DELETE' })
+      const res = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/transactions/${id}`, { method: 'DELETE' })
       if (!res.ok) throw new Error('Network error')
       return res.json()
     },

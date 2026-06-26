@@ -54,7 +54,7 @@ export default function Summary({ currency, startingBalance }) {
   const { data: summary, isLoading: isSummaryLoading } = useQuery({
     queryKey: ['summary', selectedYear, selectedMonth],
     queryFn: async () => {
-      const res = await fetch(`/api/summary?year=${selectedYear}&month=${selectedMonth}`)
+      const res = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/summary?year=${selectedYear}&month=${selectedMonth}`)
       if (!res.ok) throw new Error('Failed to fetch summary')
       return res.json()
     }
@@ -64,7 +64,7 @@ export default function Summary({ currency, startingBalance }) {
   const { data: transactions, isLoading: isTransactionsLoading } = useQuery({
     queryKey: ['transactions', selectedYear, selectedMonth],
     queryFn: async () => {
-      const res = await fetch(`/api/transactions?year=${selectedYear}&month=${selectedMonth}`)
+      const res = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/transactions?year=${selectedYear}&month=${selectedMonth}`)
       if (!res.ok) throw new Error('Failed to fetch transactions')
       return res.json()
     }
