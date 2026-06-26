@@ -130,7 +130,7 @@ export default function Goals({ currency }) {
   const circumference = 2 * Math.PI * radius // ~188.49
 
   return (
-    <div className="flex flex-col gap-6 px-4 py-4 select-none pb-8">
+    <div className="flex flex-col gap-6 px-4 py-4 select-none pb-32">
       <svg width="0" height="0" className="absolute">
         <defs>
           <linearGradient id="goalGrad" x1="0%" y1="0%" x2="100%" y2="100%">

@@ -8,7 +8,7 @@ from sqlalchemy.orm import sessionmaker, declarative_base
 # or executing DROP TABLE statements in the SQLite console) because there are no
 # migrations configured for this local database.
 
-DATABASE_URL = os.environ.get("POSTGRES_URL") or "sqlite:///./budget.db"
+DATABASE_URL = os.environ.get("POSTGRES_URL") or os.environ.get("aura_db_POSTGRES_URL") or "sqlite:///./budget.db"
 
 if DATABASE_URL.startswith("sqlite"):
     connect_args = {"check_same_thread": False}

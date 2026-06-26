@@ -127,6 +127,7 @@ export default function Dashboard({ currency, startingBalance }) {
   const [editingTransaction, setEditingTransaction] = useState(null)
   const [chartPop, setChartPop] = useState(false)
   const [rotateFab, setRotateFab] = useState(false)
+  const [showTransactions, setShowTransactions] = useState(true)
 
   const symbol = CURRENCY_SYMBOLS[currency] || '₦'
 
@@ -424,7 +425,7 @@ export default function Dashboard({ currency, startingBalance }) {
   const computedBalance = (summary?.total_balance || 0) + parseFloat(startingBalance || 0)
 
   return (
-    <div className="flex flex-col gap-4 px-4 py-4 relative select-none">
+    <div className="flex flex-col gap-4 px-4 py-4 pb-32 relative select-none">
       
       {/* Top Bar Month Selector */}
       <header className="flex flex-col justify-between items-start gap-3 border-b border-white/5 pb-3">
@@ -481,7 +482,9 @@ export default function Dashboard({ currency, startingBalance }) {
               {isSummaryLoading ? (
                 <span className="opacity-20 animate-pulse">00,000</span>
               ) : (
-                <span>{computedBalance.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
+                <span className={computedBalance < 0 ? 'text-danger' : 'text-white'}>
+                  {computedBalance.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                </span>
               )}
             </h1>
           </div>
@@ -641,38 +644,48 @@ export default function Dashboard({ currency, startingBalance }) {
 
       {/* Transaction List (Swipeable rows) */}
       <section className="flex flex-col gap-3">
-        <h3 className="text-sm font-display font-bold">Recent Transactions</h3>
+        <div className="flex items-center justify-between">
+          <h3 className="text-sm font-display font-bold">Recent Transactions</h3>
+          <button
+            onClick={() => setShowTransactions(prev => !prev)}
+            className="text-[10px] text-white/40 hover:text-white/70 font-bold uppercase tracking-wider transition"
+          >
+            {showTransactions ? 'Hide ▲' : 'Show ▼'}
+          </button>
+        </div>
         
-        {isTransactionsLoading ? (
-          <div className="flex flex-col gap-2">
-            {[1, 2, 3].map((i) => (
-              <div key={i} className="h-16 w-full rounded-2xl bg-white/5 border border-white/5 animate-pulse" />
-            ))}
-          </div>
-        ) : Object.keys(groupedTransactions).length === 0 ? (
-          <div className="glass-panel border border-white/10 rounded-2xl p-6 text-center text-white/40 text-xs">
-            No records found.
-          </div>
-        ) : (
-          <div className="flex flex-col gap-4">
-            {Object.keys(groupedTransactions).map((dateGroup) => (
-              <div key={dateGroup} className="flex flex-col gap-2">
-                <span className="text-[10px] uppercase text-white/40 font-extrabold tracking-wider pl-1">{dateGroup}</span>
-                <div className="flex flex-col gap-2">
-                  {groupedTransactions[dateGroup].map((tx) => (
-                    <TransactionRow
-                      key={tx.id}
-                      tx={tx}
-                      onEdit={handleOpenEditModal}
-                      onDelete={(id) => deleteMutation.mutate(id)}
-                      categoryMap={CATEGORY_MAP}
-                      currencySymbol={symbol}
-                    />
-                  ))}
+        {showTransactions && (
+          isTransactionsLoading ? (
+            <div className="flex flex-col gap-2">
+              {[1, 2, 3].map((i) => (
+                <div key={i} className="h-16 w-full rounded-2xl bg-white/5 border border-white/5 animate-pulse" />
+              ))}
+            </div>
+          ) : Object.keys(groupedTransactions).length === 0 ? (
+            <div className="glass-panel border border-white/10 rounded-2xl p-6 text-center text-white/40 text-xs">
+              No records found.
+            </div>
+          ) : (
+            <div className="flex flex-col gap-4">
+              {Object.keys(groupedTransactions).map((dateGroup) => (
+                <div key={dateGroup} className="flex flex-col gap-2">
+                  <span className="text-[10px] uppercase text-white/40 font-extrabold tracking-wider pl-1">{dateGroup}</span>
+                  <div className="flex flex-col gap-2">
+                    {groupedTransactions[dateGroup].map((tx) => (
+                      <TransactionRow
+                        key={tx.id}
+                        tx={tx}
+                        onEdit={handleOpenEditModal}
+                        onDelete={(id) => deleteMutation.mutate(id)}
+                        categoryMap={CATEGORY_MAP}
+                        currencySymbol={symbol}
+                      />
+                    ))}
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )
         )}
       </section>
 

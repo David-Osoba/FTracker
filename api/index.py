@@ -1,3 +1,7 @@
+from dotenv import load_dotenv
+load_dotenv(".env.local")
+
+
 from fastapi import FastAPI, Depends, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
